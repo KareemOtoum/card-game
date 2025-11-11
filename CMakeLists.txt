@@ -1,0 +1,9 @@
+cmake_minimum_required(VERSION 3.15...4.0)
+project(
+    higher_lower 
+    VERSION 1.0
+    LANGUAGES CXX)
+
+add_executable(game
+    main.cpp)
+
