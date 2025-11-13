@@ -8,6 +8,7 @@ project(
 add_executable(game
     src/card.cpp
     src/deck.cpp
+    src/game_state.cpp
     src/main.cpp
     src/terminal.cpp
 )

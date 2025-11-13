@@ -1,13 +1,10 @@
 
 #include "terminal.h"
 #include "deck.h"
+#include "game_state.h"
 #include <sstream>
 #include <thread>
 #include <chrono>
-
-static bool stop_game { false };
-static int score;
-static int streak;
 
 void handle_guess(const Card& curr, const Card& next, bool higher);
 void handle_unkown();
@@ -20,9 +17,9 @@ int main() {
 
     std::string input;
 
-    while(!stop_game) {
+    while(GameState::in_play_) {
         terminal::clear_screen();
-        terminal::print_score(score);
+        terminal::print_score(GameState::get_score());
 
         auto& current_card = deck.get_next_card();
 
@@ -38,7 +35,7 @@ int main() {
         auto& next_card { deck.check_next_card() };
 
         if(input == "q") {
-            stop_game = true;
+            GameState::in_play_ = false;
             break;
         } else if(input == "h") {
             handle_guess(current_card, next_card, true);
@@ -54,34 +51,35 @@ int main() {
 }
 
 void correct_guess() {
-    ++streak;
-    if(streak >= 2) {
-        std::string streak_str = std::to_string(streak) + "x Streak!\n";
+    GameState::correct_guess();
+
+    if(GameState::get_streak() > 1) {
+        std::string streak_str = 
+        std::to_string(GameState::get_streak()) + "x Streak!\n";
         terminal::print_yellow(streak_str);
-        score += 2 * streak;
-        std::string score_add_str = "+" + 
-            std::to_string(2 * streak) + " Correct!\n"; 
-        terminal::print_green(score_add_str);
-    } else {
-        score += 2;
-        terminal::print_green("+2 Correct!\n");
     }
+
+    std::string score_add_str = "+" + 
+            std::to_string(
+                GameState::correct_guess_pts * GameState::get_streak()
+            ) + " Correct!\n"; 
+    terminal::print_green(score_add_str);
 }
 
 void incorrect_guess() {
     terminal::print_red("-2 Wrong...\n");
-    streak = 0;
-    score -= 2;
-    score = std::max(score, 0);
+    GameState::incorrect_guess();
 }
 
 void handle_guess
     (const Card& curr, const Card& next, bool higher) {
     auto curr_val = curr.get_value_int();
     auto next_val = next.get_value_int();
+
     // invalid card in the deck
     if(curr_val == -1 || next_val == -1) {
-        stop_game = true;
+        std::cerr << "Detected invalid card... exiting game\n";
+        GameState::in_play_ = false;
         return;
     }
 
