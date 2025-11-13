@@ -3,7 +3,7 @@
 <img width="375" height="450" alt="image" src="https://github.com/user-attachments/assets/7f12272b-9d79-4ca5-badb-fc90eb02c6e9" />
 
 # Building and Running
-
+*Intended for Linux/MacOS, rendering not tested on windows*
 ```bash
     git clone https://github.com/KareemOtoum/card-game.git
     cd card-game
