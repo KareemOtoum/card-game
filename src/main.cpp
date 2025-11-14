@@ -12,7 +12,9 @@ void handle_unkown();
 int main() {
     using namespace std::chrono_literals;
 
-    Deck deck{ 10 };
+    const int shuffles { 10 };
+    const int deck_size { 52 };
+    Deck deck{ shuffles, deck_size };
     Card mystery_card {"?", Card::suit::UNKOWN};
 
     std::string input;
@@ -22,6 +24,7 @@ int main() {
         terminal::print_score(GameState::get_score());
 
         auto& current_card = deck.get_next_card();
+        if(!GameState::in_play_) break;
 
         std::vector<Card> display_cards { 
             current_card, mystery_card };
@@ -83,8 +86,8 @@ void handle_guess
         return;
     }
 
-    if(higher && curr_val < next_val) correct_guess();
-    else if(!higher && curr_val > next_val) correct_guess();
+    if(higher && curr_val <= next_val) correct_guess();
+    else if(!higher && curr_val >= next_val) correct_guess();
     else incorrect_guess();
 
     std::vector<Card> display_next { next };

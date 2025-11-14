@@ -14,3 +14,10 @@ void GameState::incorrect_guess() {
     score_ += incorrect_guess_pts;
     score_ = std::max(score_, 0);
 }
+
+void GameState::end_game() {
+    terminal::clear_screen();
+    terminal::print_yellow("Game Over!\n");
+    terminal::print_score(score_, true);
+    in_play_ = false;
+}

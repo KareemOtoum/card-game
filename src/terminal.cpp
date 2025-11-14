@@ -52,10 +52,15 @@ namespace terminal {
         std::cout << "\033[33m" << str << "\033[0m";
     }
 
-    void print_score(int score) {
+    void print_score(int score, bool final) {
         std::cout << "=====================\n";
-        std::cout << "      \033[1;4;32mScore:\033[0m " 
-            << score << "\n";
+        if(!final) {
+            std::cout << "      \033[1;4;32mScore:\033[0m " 
+                << score << "\n";
+        } else {
+            std::cout << "\033[1;4;32mFinal Score:\033[0m " 
+                << score << "\n";
+        }
         std::cout << "=====================\n";
     }
 }

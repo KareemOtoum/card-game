@@ -2,11 +2,14 @@
 
 #include <iostream>
 
+#include "terminal.h"
+
 class GameState {
 public:
     static void    correct_guess();
     static void    incorrect_guess();
-    
+    static void    end_game();
+
     static int     get_score() { return score_; }
     static int     get_streak() { return streak_; }
 
